@@ -76,3 +76,4 @@ gem 'rails_admin'
 gem "devise", "~> 4.9"
 gem "cssbundling-rails"
 
+gem "sassc-rails"
