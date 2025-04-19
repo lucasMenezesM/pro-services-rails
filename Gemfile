@@ -44,6 +44,9 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
   gem 'dotenv-rails'
+  gem 'rspec-rails', '~> 7.0.0'
+  gem "factory_bot_rails", "~> 6.4"
+  gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'main'
 end
 
 group :development do
@@ -71,3 +74,5 @@ gem 'hirb', '~> 0.7.3'
 
 gem 'rails_admin'
 gem "devise", "~> 4.9"
+gem "cssbundling-rails"
+
