@@ -77,3 +77,4 @@ gem "devise", "~> 4.9"
 gem "cssbundling-rails"
 
 gem "sassc-rails"
+gem "tailwindcss-rails", "~> 4.2"

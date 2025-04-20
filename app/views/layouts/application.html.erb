@@ -3,7 +3,7 @@
   <head>
     <title><%= content_for(:title) || "Market Place Servicos" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -15,11 +15,79 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <%= yield %>
+    <!-- Responsive SideBar -->
+    <div x-data="{ open: false }" class="flex h-screen">
+
+      <!-- Sidebar Mobile -->
+      <div
+        x-show="open"
+        class="fixed inset-y-0 left-0 w-64 bg-gray-900 text-white p-4 space-y-4 z-50 md:hidden"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-x-full"
+        x-transition:enter-end="opacity-100 translate-x-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-x-0"
+        x-transition:leave-end="opacity-0 -translate-x-full"
+      >
+        <div class="flex justify-between items-center mb-6">
+          <span class="text-2xl font-bold">
+            <%=link_to 'ProServices', root_path%>
+          </span>
+          <button @click="open = false">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <nav class="flex flex-col space-y-2">
+          <!-- Links listed -->
+          <%= render 'layouts/shared/side_bar_links'%>
+        </nav>
+      </div>
+
+      <!-- Sidebar Desktop -->
+      <div class="hidden md:flex md:flex-col w-64 bg-gray-900 text-white p-4 space-y-4">
+        <div class="text-2xl font-bold mb-6">
+          <%=link_to 'ProServices', root_path%>
+        </div>
+        <nav class="flex flex-col space-y-2">
+          <!-- Links listed -->
+          <%= render 'layouts/shared/side_bar_links'%>
+
+        </nav>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 p-4">
+        <!-- Mobile Button -->
+        <button
+          @click="open = true"
+          class="md:hidden mb-4 inline-flex items-center p-2 text-gray-700 hover:bg-gray-200 rounded"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+
+        <!-- Flash Messages -->
+        <p class="notice"><%= notice %></p>
+        <p class="alert"><%= alert %></p>
+
+        <!-- Loading Application content -->
+        <%= yield %>
+      </div>
+      
+    </div>
+
   </body>
 </html>
