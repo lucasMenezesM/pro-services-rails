@@ -1,0 +1,11 @@
+<% content_for :title, "New service category" %>
+
+<h1>New service category</h1>
+
+<%= render "form", service_category: @service_category %>
+
+<br>
+
+<div>
+  <%= link_to "Back to service categories", service_categories_path %>
+</div>
