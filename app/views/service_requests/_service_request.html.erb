@@ -1,0 +1,27 @@
+<div id="<%= dom_id service_request %>" class="w-full sm:w-auto my-5 space-y-5">
+  <div>
+    <strong class="block font-medium mb-1">Title:</strong>
+    <%= service_request.title %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Description:</strong>
+    <%= service_request.description %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Status:</strong>
+    <%= service_request.status %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Client:</strong>
+    <%= service_request.client.name %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Service:</strong>
+    <%= service_request.service.name %>
+  </div>
+
+  <div>
+    <strong class="block font-medium mb-1">Service Category:</strong>
+    <%= service_request.service.service_category.name %>
+  </div>
+</div>

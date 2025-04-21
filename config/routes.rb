@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :service_requests
   resources :services
   resources :service_categories
   devise_for :users, controllers: {

@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :service_category do
-    name { 'Technology' }
+    name { Faker::Job.position }
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_19_214047) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_20_213448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,6 +18,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_19_214047) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "service_requests", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "description", null: false
+    t.string "status", default: "open", null: false
+    t.bigint "client_id", null: false
+    t.bigint "service_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_service_requests_on_client_id"
+    t.index ["service_id"], name: "index_service_requests_on_service_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -50,5 +62,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_19_214047) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "service_requests", "services"
+  add_foreign_key "service_requests", "users", column: "client_id"
   add_foreign_key "services", "service_categories"
 end
