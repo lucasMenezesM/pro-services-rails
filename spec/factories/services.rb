@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :service do
-    name { "Fix Computers" }
+    name { Faker::Job.field }
     service_category
   end
 end
