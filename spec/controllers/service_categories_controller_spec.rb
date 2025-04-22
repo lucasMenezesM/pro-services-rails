@@ -25,10 +25,11 @@ require 'rails_helper'
 
 RSpec.describe ServiceCategoriesController, type: :controller do
 
-  let(:user) { FactoryBot.create(:user) }
+  let(:admin_user) { FactoryBot.create(:user, role: 'admin') }
+  let(:client_user) { FactoryBot.create(:user, role: 'client') }
 
   before do
-    sign_in user
+    sign_in admin_user
   end
 
   # This should return the minimal set of attributes required to create a valid
@@ -69,6 +70,13 @@ RSpec.describe ServiceCategoriesController, type: :controller do
       get :new, params: {}, session: valid_session
       expect(response).to be_successful
     end
+    
+    it "returns a AccessDenied error" do
+      sign_in client_user
+      expect{
+        get :new, params: {}, session: valid_session
+      }.to raise_error(CanCan::AccessDenied)
+    end
   end
 
   describe "GET #edit" do
@@ -76,6 +84,14 @@ RSpec.describe ServiceCategoriesController, type: :controller do
       service_category = ServiceCategory.create! valid_attributes
       get :edit, params: {id: service_category.to_param}, session: valid_session
       expect(response).to be_successful
+    end
+
+    it "returns a AccessDenied error" do
+      sign_in client_user
+      service_category = ServiceCategory.create! valid_attributes
+      expect{
+        get :edit, params: {id: service_category.to_param}, session: valid_session
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -99,14 +115,23 @@ RSpec.describe ServiceCategoriesController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+
+    context 'with unauthorized user' do
+      it "returns a AccessDenied error" do
+        sign_in client_user
+        expect{
+          post :create, params: {service_category: valid_attributes}, session: valid_session
+        }.to raise_error(CanCan::AccessDenied)
+      end
+    end
   end
 
   describe "PUT #update" do
+    new_category_name = 'new category'
+    let(:new_attributes) {
+      { name: new_category_name }
+    }
     context "with valid params" do
-      new_category_name = 'new category'
-      let(:new_attributes) {
-        { name: new_category_name }
-      }
 
       it "updates the requested service_category" do
         service_category = ServiceCategory.create! valid_attributes
@@ -129,6 +154,16 @@ RSpec.describe ServiceCategoriesController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+
+    context 'with unauthorized user' do
+      it "returns a AccessDenied error" do
+        sign_in client_user
+        service_category = ServiceCategory.create! valid_attributes
+        expect{
+          put :update, params: {id: service_category.to_param, service_category: new_attributes}, session: valid_session
+        }.to raise_error(CanCan::AccessDenied)
+      end
+    end
   end
 
   describe "DELETE #destroy" do
@@ -143,6 +178,15 @@ RSpec.describe ServiceCategoriesController, type: :controller do
       service_category = ServiceCategory.create! valid_attributes
       delete :destroy, params: {id: service_category.to_param}, session: valid_session
       expect(response).to redirect_to(service_categories_url)
+    end
+
+    it 'returns a AccessDenied error' do
+      service_category = ServiceCategory.create! valid_attributes
+      sign_in client_user
+
+      expect{
+        delete :destroy, params: {id: service_category.to_param}, session: valid_session
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 

@@ -25,11 +25,12 @@ require 'rails_helper'
 
 RSpec.describe ServicesController, type: :controller do
 
-  let(:user) { FactoryBot.create(:user) }
+  let(:admin_user) { FactoryBot.create(:user, role: 'admin') }
+  let(:client_user) { FactoryBot.create(:user, role: 'client') }
   let(:service_category) { FactoryBot.create(:service_category) }
 
   before do
-    sign_in user
+    sign_in admin_user
   end
 
   # This should return the minimal set of attributes required to create a valid
@@ -69,6 +70,14 @@ RSpec.describe ServicesController, type: :controller do
       get :new, params: {}, session: valid_session
       expect(response).to be_successful
     end
+    
+    it "returns a not authorized error" do
+      sign_in client_user
+
+      expect{
+        get :new, params: {}, session: valid_session
+      }.to raise_error(CanCan::AccessDenied)
+    end
   end
 
   describe "GET #edit" do
@@ -76,6 +85,16 @@ RSpec.describe ServicesController, type: :controller do
       service = Service.create! valid_attributes
       get :edit, params: {id: service.to_param}, session: valid_session
       expect(response).to be_successful
+    end
+
+    it "returns a not authorized error" do
+      service = Service.create! valid_attributes
+
+      sign_in client_user
+
+      expect{
+        get :edit, params: {id: service.to_param}, session: valid_session
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -97,6 +116,16 @@ RSpec.describe ServicesController, type: :controller do
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post :create, params: {service: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context 'with not authorized user' do
+      it 'returns a not authorized error' do
+        sign_in client_user
+
+        expect{
+          post :create, params: {service: valid_attributes}, session: valid_session
+        }.to raise_error(CanCan::AccessDenied)
       end
     end
   end
@@ -131,20 +160,44 @@ RSpec.describe ServicesController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+
+    context 'with unauthorized user' do
+      it 'returns a AccessDenied error' do
+        service = Service.create! valid_attributes
+        sign_in client_user
+
+        expect{
+          put :update, params:{ id: service.to_param }, session: valid_session
+        }.to raise_error(CanCan::AccessDenied)
+      end
+    end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested service" do
-      service = Service.create! valid_attributes
-      expect {
+    context 'with authorized user' do
+      it "destroys the requested service" do
+        service = Service.create! valid_attributes
+        expect {
+          delete :destroy, params: {id: service.to_param}, session: valid_session
+        }.to change(Service, :count).by(-1)
+      end
+
+      it "redirects to the services list" do
+        service = Service.create! valid_attributes
         delete :destroy, params: {id: service.to_param}, session: valid_session
-      }.to change(Service, :count).by(-1)
+        expect(response).to redirect_to(services_url)
+     end
     end
 
-    it "redirects to the services list" do
-      service = Service.create! valid_attributes
-      delete :destroy, params: {id: service.to_param}, session: valid_session
-      expect(response).to redirect_to(services_url)
+    context 'with unauthorized user' do
+      it 'returns a AccessDenied error' do
+        service = Service.create! valid_attributes
+        sign_in client_user
+
+        expect{
+          put :destroy, params:{ id: service.to_param }, session: valid_session
+        }.to raise_error(CanCan::AccessDenied)
+      end
     end
   end
 
