@@ -3,24 +3,32 @@ class ServicesController < ApplicationController
 
   # GET /services or /services.json
   def index
+    authorize! :read, Service
+    
     @services = Service.all
   end
 
   # GET /services/1 or /services/1.json
   def show
+    authorize! :read, Service
   end
 
   # GET /services/new
   def new
+    authorize! :create, Service
+
     @service = Service.new
   end
 
   # GET /services/1/edit
   def edit
+    authorize! :update, Service
   end
 
   # POST /services or /services.json
   def create
+    authorize! :create, Service
+
     @service = Service.new(service_params)
 
     respond_to do |format|
@@ -36,6 +44,8 @@ class ServicesController < ApplicationController
 
   # PATCH/PUT /services/1 or /services/1.json
   def update
+    authorize! :update, Service
+
     respond_to do |format|
       if @service.update(service_params)
         format.html { redirect_to @service, notice: "Service was successfully updated." }
@@ -49,6 +59,8 @@ class ServicesController < ApplicationController
 
   # DELETE /services/1 or /services/1.json
   def destroy
+    authorize! :destroy, Service
+
     @service.destroy!
 
     respond_to do |format|

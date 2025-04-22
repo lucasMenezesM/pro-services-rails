@@ -16,4 +16,8 @@ class User < ApplicationRecord
   def client?
     self.role == 'client'
   end
+
+  def admin?
+    self.role == 'admin'
+  end
 end

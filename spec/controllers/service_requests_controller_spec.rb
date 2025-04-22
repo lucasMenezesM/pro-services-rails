@@ -81,6 +81,13 @@ RSpec.describe ServiceRequestsController, type: :controller do
       get :new, params: {}, session: valid_session
       expect(response).to be_successful
     end
+
+    it 'returns AccessDenied error' do
+      sign_out client
+      expect{
+        get :new, params: {}, session: valid_session
+      }.to raise_error(CanCan::AccessDenied)
+    end
   end
 
   describe "GET #edit" do
@@ -88,6 +95,13 @@ RSpec.describe ServiceRequestsController, type: :controller do
       service_request = ServiceRequest.create! valid_attributes
       get :edit, params: {id: service_request.to_param}, session: valid_session
       expect(response).to be_successful
+    end
+
+    it 'returns AccessDenied error' do
+      sign_out client
+      expect{
+        get :new, params: {}, session: valid_session
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -111,17 +125,26 @@ RSpec.describe ServiceRequestsController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+
+    context 'with signed out user' do
+      it 'returns AccessDenied error' do
+        sign_out client
+        expect{
+          get :new, params: {}, session: valid_session
+        }.to raise_error(CanCan::AccessDenied)
+      end
+    end
   end
 
   describe "PUT #update" do
+    new_fields_for_update = {
+      title: 'new title',
+      description: 'new description',
+    }
+    let(:new_attributes) {
+      new_fields_for_update
+    }
     context "with valid params" do
-      new_fields_for_update = {
-        title: 'new title',
-        description: 'new description',
-      }
-      let(:new_attributes) {
-        new_fields_for_update
-      }
 
       it "updates the requested service_request" do
         service_request = ServiceRequest.create! valid_attributes
@@ -144,21 +167,59 @@ RSpec.describe ServiceRequestsController, type: :controller do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+
+    context 'with different user' do
+      it 'returns AccessDenied error' do
+        service_request = ServiceRequest.create! valid_attributes
+        second_user = create(:user)
+        sign_in second_user
+
+        expect{
+          put :update, params: {id: service_request.to_param, service_request: new_attributes}, session: valid_session
+        }.to raise_error(CanCan::AccessDenied)
+      end
+    end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested service_request" do
-      service_request = ServiceRequest.create! valid_attributes
-      expect {
+    context 'with authorized user' do
+      it "destroys the requested service_request" do
+        service_request = ServiceRequest.create! valid_attributes
+        expect {
+          delete :destroy, params: {id: service_request.to_param}, session: valid_session
+        }.to change(ServiceRequest, :count).by(-1)
+      end
+
+      it "redirects to the service_requests list" do
+        service_request = ServiceRequest.create! valid_attributes
         delete :destroy, params: {id: service_request.to_param}, session: valid_session
-      }.to change(ServiceRequest, :count).by(-1)
+        expect(response).to redirect_to(service_requests_url)
+      end
     end
 
-    it "redirects to the service_requests list" do
-      service_request = ServiceRequest.create! valid_attributes
-      delete :destroy, params: {id: service_request.to_param}, session: valid_session
-      expect(response).to redirect_to(service_requests_url)
+    context 'with signed out user' do
+      it 'returns AccessDenied error' do
+        service_request = ServiceRequest.create! valid_attributes
+        sign_out client
+
+        expect {
+          delete :destroy, params: {id: service_request.to_param}, session: valid_session
+        }.to raise_error(CanCan::AccessDenied)
+      end
     end
+
+    context 'with different user' do
+      it 'returns AccessDenied error' do
+        service_request = ServiceRequest.create! valid_attributes
+        second_user = create(:user)
+        sign_in second_user
+        
+        expect{
+          delete :destroy, params: {id: service_request.to_param}, session: valid_session
+        }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
   end
 
 end

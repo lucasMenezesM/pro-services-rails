@@ -1,28 +1,35 @@
 class ServiceRequestsController < ApplicationController
   before_action :set_service_request, only: %i[ show edit update destroy ]
+  before_action :set_services, only: %i[ create edit ]
 
   # GET /service_requests or /service_requests.json
   def index
+    authorize! :read, ServiceRequest
     @service_requests = ServiceRequest.all
   end
 
   # GET /service_requests/1 or /service_requests/1.json
   def show
+    authorize! :read, ServiceRequest
   end
 
   # GET /service_requests/new
   def new
+    authorize! :create, ServiceRequest
+
     @service_request = ServiceRequest.new
     @services = Service.all
   end
 
   # GET /service_requests/1/edit
   def edit
+    authorize! :update, @service_request
   end
 
   # POST /service_requests or /service_requests.json
   def create
-    @services = Service.all
+    authorize! :create, ServiceRequest
+
     @service_request = ServiceRequest.new(service_request_params)
     @service_request.client = current_user
 
@@ -39,6 +46,8 @@ class ServiceRequestsController < ApplicationController
 
   # PATCH/PUT /service_requests/1 or /service_requests/1.json
   def update
+    authorize! :update, @service_request
+
     respond_to do |format|
       if @service_request.update(service_request_params)
         format.html { redirect_to @service_request, notice: "Service request was successfully updated." }
@@ -52,6 +61,8 @@ class ServiceRequestsController < ApplicationController
 
   # DELETE /service_requests/1 or /service_requests/1.json
   def destroy
+    authorize! :destroy, @service_request
+
     @service_request.destroy!
 
     respond_to do |format|
@@ -69,5 +80,9 @@ class ServiceRequestsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def service_request_params
       params.require(:service_request).permit(:title, :description, :service_id, :client_id)
+    end
+
+    def set_services
+      @services = Service.all
     end
 end

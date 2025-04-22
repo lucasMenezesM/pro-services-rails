@@ -8,6 +8,10 @@
     <%= service_request.description %>
   </div>
   <div>
+    <strong class="block font-medium mb-1">Created by:</strong>
+    <%= service_request.client.name %>
+  </div>
+  <div>
     <strong class="block font-medium mb-1">Status:</strong>
     <%= service_request.status %>
   </div>

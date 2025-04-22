@@ -3,24 +3,29 @@ class ServiceCategoriesController < ApplicationController
 
   # GET /service_categories or /service_categories.json
   def index
+    authorize! :read, ServiceCategory
     @service_categories = ServiceCategory.all
   end
 
   # GET /service_categories/1 or /service_categories/1.json
   def show
+    authorize! :read, ServiceCategory
   end
 
   # GET /service_categories/new
   def new
+    authorize! :create, ServiceCategory
     @service_category = ServiceCategory.new
   end
 
   # GET /service_categories/1/edit
   def edit
+    authorize! :update, ServiceCategory
   end
 
   # POST /service_categories or /service_categories.json
   def create
+    authorize! :create, ServiceCategory
     @service_category = ServiceCategory.new(service_category_params)
 
     respond_to do |format|
@@ -36,6 +41,7 @@ class ServiceCategoriesController < ApplicationController
 
   # PATCH/PUT /service_categories/1 or /service_categories/1.json
   def update
+    authorize! :update, ServiceCategory
     respond_to do |format|
       if @service_category.update(service_category_params)
         format.html { redirect_to @service_category, notice: "Service category was successfully updated." }
@@ -49,6 +55,8 @@ class ServiceCategoriesController < ApplicationController
 
   # DELETE /service_categories/1 or /service_categories/1.json
   def destroy
+    authorize! :destroy, ServiceCategory
+
     @service_category.destroy!
 
     respond_to do |format|

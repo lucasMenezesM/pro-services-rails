@@ -13,16 +13,38 @@ Service.delete_all
 User.delete_all
 ServiceCategory.delete_all
 
-User.create!(
-  name: 'lucas',
-  email: 'lucas@email.com',
-  password: 'password',
-  address: Faker::Address.street_address,
-  country: Faker::Address.country,
-  state: Faker::Address.state,
-  city: Faker::Address.city,
-  role: 'admin',
-)
+User.create!([
+  {
+    name: 'lucas',
+    email: 'lucas@email.com',
+    password: 'password',
+    address: Faker::Address.street_address,
+    country: Faker::Address.country,
+    state: Faker::Address.state,
+    city: Faker::Address.city,
+    role: 'admin',
+  },
+  {
+    name: 'Professional Test User',
+    email: 'p_test@test.com',
+    password: 'password',
+    address: Faker::Address.street_address,
+    country: Faker::Address.country,
+    state: Faker::Address.state,
+    city: Faker::Address.city,
+    role: 'professional',
+  },
+  {
+    name: 'Client Test User',
+    email: 'c_test@test.com',
+    password: 'password',
+    address: Faker::Address.street_address,
+    country: Faker::Address.country,
+    state: Faker::Address.state,
+    city: Faker::Address.city,
+    role: 'professional',
+  }
+])
 
 roles = ['professional', 'client']
 
