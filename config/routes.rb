@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :service_requests
+  resources :service_requests do
+    collection do
+    end
+  end
+  
   resources :services
   resources :service_categories
   devise_for :users, controllers: {
@@ -23,4 +27,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "pages#home"
+
+  # SERVICE REQUESTS PAGES
+  get 'my_requests', to: 'service_requests#my_requests', as: 'my_requests'
+  get 'open_requests', to: 'service_requests#open_requests', as: 'open_requests'
+  get 'closed_requests', to: 'service_requests#closed_requests', as: 'closed_requests'
+  get 'cancelled_requests', to: 'service_requests#cancelled_requests', as: 'cancelled_requests'
+  get 'in_progress_requests', to: 'service_requests#in_progress_requests', as: 'in_progress_requests'
+  get 'available_requests', to: 'service_requests#available_requests', as: 'available_requests'
 end

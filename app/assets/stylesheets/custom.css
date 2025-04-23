@@ -1,0 +1,22 @@
+/* Define variables */
+:root {
+  /* --primary-color: rgb(16, 24, 40); */
+  --primary-color: rgb(39, 84, 138);
+  --secondary-color: rgb(24, 59, 78);
+  --font-size: 16px;
+}
+
+/* Use variables */
+.primary-color {
+  color: var(--secondary-color);
+}
+
+.bg-primary-color {
+  background-color: var(--secondary-color);
+}
+
+.tab-selected {
+  border-bottom: 2px solid var(--secondary-color);
+  color: var(--primary-color);
+  /* align-self: e; */
+}

@@ -13,7 +13,7 @@ Service.delete_all
 User.delete_all
 ServiceCategory.delete_all
 
-User.create!([
+users = User.create!([
   {
     name: 'lucas',
     email: 'lucas@email.com',
@@ -42,18 +42,33 @@ User.create!([
     country: Faker::Address.country,
     state: Faker::Address.state,
     city: Faker::Address.city,
-    role: 'professional',
+    role: 'client',
   }
 ])
 
 roles = ['professional', 'client']
+requests_status = ['open', 'closed', 'in_progress', 'cancelled']
+
+10.times do
+  FactoryBot.create(:service_request, client: users[0], status: requests_status.sample)
+end
+
+FactoryBot.create(:service_request, client: users[0])
+FactoryBot.create(:service_request, client: users[0])
+FactoryBot.create(:service_request, client: users[0])
+FactoryBot.create(:service_request, client: users[0], status: 'open')
+FactoryBot.create(:service_request, client: users[0], status: 'closed')
+FactoryBot.create(:service_request, client: users[0], status: 'in_progress')
+FactoryBot.create(:service_request, client: users[0], status: 'cancelled')
+
+
 
 10.times do
   user = FactoryBot.create(:user, role: roles.sample)
   service_category = FactoryBot.create(:service_category)
   service = FactoryBot.create(:service, service_category: service_category)
-  service_request = FactoryBot.create(:service_request, service: service, client: user)
-  service_request2 = FactoryBot.create(:service_request, service: service, client: user)
+  service_request = FactoryBot.create(:service_request, service: service, client: user, status: requests_status.sample)
+  service_request2 = FactoryBot.create(:service_request, service: service, client: user, status: requests_status.sample)
 end
 
 puts "Seeds created successfully!"
