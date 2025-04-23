@@ -1,0 +1,20 @@
+ <!-- component -->
+<div class="bg-white">
+    <nav class="flex flex-col sm:flex-row">
+        <button class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none  <%= is_tab_selected?('/my_requests') %>">
+            <%=link_to 'All Requests', my_requests_path%>
+        </button>
+        <button class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none <%= is_tab_selected?('/open_requests') %>">
+            <%=link_to 'Open Requests', open_requests_path%>
+        </button>
+        <button class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none <%= is_tab_selected?('/closed_requests') %>">
+            <%=link_to 'Closed Requests', closed_requests_path%>
+        </button>
+        <button class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none <%= is_tab_selected?('/in_progress_requests') %>">
+            <%=link_to 'In Progress...', in_progress_requests_path%>
+        </button>
+        <button class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none <%= is_tab_selected?('/cancelled_requests') %>">
+            <%=link_to 'Cancelled Requests', cancelled_requests_path%>
+        </button>
+    </nav>
+</div>

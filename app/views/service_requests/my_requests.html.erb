@@ -1,0 +1,16 @@
+<% content_for :title, "Service requests" %>
+
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+ <%=render 'service_requests/shared/requests_tabs' %>
+
+  <div class="flex justify-between items-center mt-5 mb-10">
+    <h1 class="font-bold text-4xl">My Requests</h1>
+    <%= link_to "New service request", new_service_request_path, class: "rounded-md px-2 py-2 bg-primary-color hover:bg-blue-500 text-white block font-small" %>
+  </div>
+
+  <%= render 'service_requests/shared/requests_list', service_requests: @service_requests %>
+</div>

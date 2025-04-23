@@ -11,6 +11,7 @@ class Ability
     if user.present?
       can :create, ServiceRequest
       can :manage, ServiceRequest, client_id: user.id
+      can :my_requests, ServiceRequest, client_id: user.id
     end
     
     can :read, ServiceRequest

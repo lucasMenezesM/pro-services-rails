@@ -60,11 +60,18 @@ RSpec.describe ServiceRequestsController, type: :controller do
   # ServiceRequestsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
+  describe "GET #my_requests" do
     it "returns a success response" do
       ServiceRequest.create! valid_attributes
-      get :index, params: {}, session: valid_session
+      get :my_requests, params: {}, session: valid_session
       expect(response).to be_successful
+    end
+
+    it "returns a AccessDenied error" do
+      sign_out client
+      expect{
+        get :my_requests, params: {}, session: valid_session
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 

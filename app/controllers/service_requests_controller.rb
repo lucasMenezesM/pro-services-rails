@@ -3,9 +3,33 @@ class ServiceRequestsController < ApplicationController
   before_action :set_services, only: %i[ create edit ]
 
   # GET /service_requests or /service_requests.json
-  def index
-    authorize! :read, ServiceRequest
-    @service_requests = ServiceRequest.all
+  def my_requests
+    authorize! :my_requests, ServiceRequest
+    @service_requests = ServiceRequest.where(client: current_user)
+  end
+
+  def closed_requests
+    authorize! :my_requests, ServiceRequest
+    @service_requests = ServiceRequest.closed.where(client: current_user)
+  end
+
+  def open_requests
+    authorize! :my_requests, ServiceRequest
+    @service_requests = ServiceRequest.open.where(client: current_user)
+  end
+
+  def cancelled_requests
+    authorize! :my_requests, ServiceRequest
+    @service_requests = ServiceRequest.cancelled.where(client: current_user)
+  end
+
+  def in_progress_requests
+    authorize! :my_requests, ServiceRequest
+    @service_requests = ServiceRequest.in_progress.where(client: current_user)
+  end
+
+  def available_requests
+    authorize! :my_requests, ServiceRequest
   end
 
   # GET /service_requests/1 or /service_requests/1.json
