@@ -46,22 +46,21 @@ users = User.create!([
   }
 ])
 
+users[0].avatar.attach(
+  io: File.open(Rails.root.join("db/seeds/images/profile_picture_test.jpg")),
+  filename: "avatar.jpg",
+  content_type: "image/jpeg"
+)
+
 roles = ['professional', 'client']
 requests_status = ['open', 'closed', 'in_progress', 'cancelled']
 
 10.times do
   FactoryBot.create(:service_request, client: users[0], status: requests_status.sample)
+  FactoryBot.create(:service_request, client: users[1], status: requests_status.sample)
+  FactoryBot.create(:service_request, client: users[2], status: requests_status.sample)
 end
-
-FactoryBot.create(:service_request, client: users[0])
-FactoryBot.create(:service_request, client: users[0])
-FactoryBot.create(:service_request, client: users[0])
-FactoryBot.create(:service_request, client: users[0], status: 'open')
-FactoryBot.create(:service_request, client: users[0], status: 'closed')
-FactoryBot.create(:service_request, client: users[0], status: 'in_progress')
-FactoryBot.create(:service_request, client: users[0], status: 'cancelled')
-
-
+  
 
 10.times do
   user = FactoryBot.create(:user, role: roles.sample)

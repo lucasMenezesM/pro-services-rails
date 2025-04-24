@@ -1,18 +1,39 @@
 /* Define variables */
 :root {
   /* --primary-color: rgb(16, 24, 40); */
-  --primary-color: rgb(39, 84, 138);
-  --secondary-color: rgb(24, 59, 78);
+  --primary-color: rgb(24, 59, 78);
+  --secondary-color: rgb(39, 84, 138);
   --font-size: 16px;
 }
 
 /* Use variables */
 .primary-color {
+  color: var(--primary-color);
+}
+
+.secondary-color {
   color: var(--secondary-color);
 }
 
 .bg-primary-color {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
+}
+
+.primary-button {
+  background-color: var(--primary-color);
+
+  &:hover {
+    background-color: var(--secondary-color);
+    cursor: pointer;
+  }
+}
+
+.primary-input {
+  &:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 5px var(--secondary-color);
+  }
 }
 
 .tab-selected {
