@@ -11,7 +11,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    super
+    super do |resource|
+      if params[:user][:avatar].blank?
+        150.times { print "*" }
+        puts "\nNo avatar provided, attaching default avatar."
+        default_avatar_path = Rails.root.join("db/seeds/images/blank-profile-picture.jpg")
+        resource.avatar.attach(
+          io: File.open(default_avatar_path),
+          filename: "blank-profile-picture.jpg",
+          content_type: "image/jpeg"
+        )
+      end
+    end
   end
 
   # GET /resource/edit
@@ -42,7 +53,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:country, :state, :city, :address, :role, :name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:country, :state, :city, :address, :role, :name, :avatar])
   end
 
   # If you have extra params to permit, append them to the sanitizer.

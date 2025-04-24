@@ -1,5 +1,7 @@
 class User < ApplicationRecord
   has_many :service_requests, foreign_key: :client_id
+  has_one_attached :avatar
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
