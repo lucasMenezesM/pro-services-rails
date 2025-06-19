@@ -67,7 +67,7 @@
       </div>
 
       <!-- Main Content -->
-      <div class="flex-1 p-4">
+      <div class="flex-1 p-4 bg-gray-100">
         <!-- Mobile Button -->
         <button
           x-show="!open"
@@ -89,8 +89,7 @@
         </button>
 
         <!-- Flash Messages -->
-        <p class="notice"><%= notice %></p>
-        <p class="alert"><%= alert %></p>
+        <%= render 'layouts/shared/flash_messages' %>
 
         <!-- Loading Application content -->
         <%= yield %>
