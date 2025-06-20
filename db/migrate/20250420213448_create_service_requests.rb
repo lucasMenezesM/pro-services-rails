@@ -5,6 +5,8 @@ class CreateServiceRequests < ActiveRecord::Migration[7.2]
       t.string :description, null: false
       t.string :status, null: false, default: 'open'
       t.references :client, null: false, foreign_key: {to_table: :users}
+      t.references :accepted_by, foreign_key: {to_table: :users}, default: nil
+      t.boolean :accepted, null: false, default: false
       t.references :service, null: false, foreign_key: true
 
       t.timestamps

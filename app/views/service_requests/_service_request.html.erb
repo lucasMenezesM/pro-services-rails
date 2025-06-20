@@ -28,4 +28,9 @@
     <strong class="block font-medium mb-1">Service Category:</strong>
     <%= service_request.service.service_category.name %>
   </div>
+  
+  <div>
+    <strong class="block font-medium mb-1">Accepted:</strong>
+    <%= service_request.accepted? ? "Yes" : "No" %>
+  </div>
 </div>

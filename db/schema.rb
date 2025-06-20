@@ -53,9 +53,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_23_203024) do
     t.string "description", null: false
     t.string "status", default: "open", null: false
     t.bigint "client_id", null: false
+    t.bigint "accepted_by_id"
+    t.boolean "accepted", default: false, null: false
     t.bigint "service_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["accepted_by_id"], name: "index_service_requests_on_accepted_by_id"
     t.index ["client_id"], name: "index_service_requests_on_client_id"
     t.index ["service_id"], name: "index_service_requests_on_service_id"
   end
@@ -93,6 +96,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_23_203024) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "service_requests", "services"
+  add_foreign_key "service_requests", "users", column: "accepted_by_id"
   add_foreign_key "service_requests", "users", column: "client_id"
   add_foreign_key "services", "service_categories"
 end
