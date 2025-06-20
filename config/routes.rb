@@ -35,4 +35,7 @@ Rails.application.routes.draw do
   get 'cancelled_requests', to: 'service_requests#cancelled_requests', as: 'cancelled_requests'
   get 'in_progress_requests', to: 'service_requests#in_progress_requests', as: 'in_progress_requests'
   get 'available_requests', to: 'service_requests#available_requests', as: 'available_requests'
+
+  # Requests functionality
+  get 'accept_service_request', to: 'service_requests#accept_service_request', as: 'accept_service_request'
 end

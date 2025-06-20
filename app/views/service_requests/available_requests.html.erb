@@ -1,0 +1,10 @@
+<div class="w-full">
+ <%=render 'service_requests/shared/requests_tabs' %>
+
+  <div class="flex justify-between items-center mt-5 mb-10">
+    <h1 class="font-bold text-4xl">My Requests</h1>
+    <%= link_to "New service request", new_service_request_path, class: "rounded-md px-2 py-2 bg-primary-color hover:bg-blue-500 text-white block font-small" %>
+  </div>
+
+  <%= render 'service_requests/shared/requests_list', service_requests: @service_requests %>
+</div>

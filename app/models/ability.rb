@@ -13,6 +13,11 @@ class Ability
       can :manage, ServiceRequest, client_id: user.id
       can :my_requests, ServiceRequest, client_id: user.id
     end
+
+    if user.present? && user.professional?
+      can :accept_service_request, ServiceRequest, accepted: false, status: 'open'
+      can :contact_client, ServiceRequest, accepted: true, accepted_by_id: user.id
+    end
     
     can :read, ServiceRequest
     can :read, Service

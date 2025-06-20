@@ -3,33 +3,49 @@ class ServiceRequestsController < ApplicationController
   before_action :set_services, only: %i[ create edit ]
 
   # GET /service_requests or /service_requests.json
+  def all_requests
+    authorize! :my_requests, ServiceRequest
+    @service_requests = ServiceRequest.all.order(created_at: :desc)
+  end
   def my_requests
     authorize! :my_requests, ServiceRequest
-    @service_requests = ServiceRequest.where(client: current_user)
+    @service_requests = ServiceRequest.where(client: current_user).order(created_at: :desc)
   end
 
   def closed_requests
     authorize! :my_requests, ServiceRequest
-    @service_requests = ServiceRequest.closed.where(client: current_user)
+    @service_requests = ServiceRequest.closed.where(client: current_user).order(created_at: :desc)
   end
 
   def open_requests
     authorize! :my_requests, ServiceRequest
-    @service_requests = ServiceRequest.open.where(client: current_user)
+    @service_requests = ServiceRequest.open.where(client: current_user).order(created_at: :desc)
   end
 
   def cancelled_requests
     authorize! :my_requests, ServiceRequest
-    @service_requests = ServiceRequest.cancelled.where(client: current_user)
+    @service_requests = ServiceRequest.cancelled.where(client: current_user).order(created_at: :desc)
   end
 
   def in_progress_requests
     authorize! :my_requests, ServiceRequest
-    @service_requests = ServiceRequest.in_progress.where(client: current_user)
+    @service_requests = ServiceRequest.in_progress.where(client: current_user).order(created_at: :desc)
   end
 
   def available_requests
     authorize! :my_requests, ServiceRequest
+    @service_requests = ServiceRequest.where(accepted: false, status: 'open').order(created_at: :desc)
+  end
+
+  def accept_service_request
+    authorize! :accept_service_request, ServiceRequest
+    service_request = ServiceRequest.find(params[:service_request_id])
+    service_request.accepted_by = current_user
+    service_request.accepted = true
+    service_request.status = "in_progress"
+    service_request.save
+
+    redirect_to service_request_path(service_request.id), notice: "You accepted this service request! Contact your client for more information about the job!"
   end
 
   # GET /service_requests/1 or /service_requests/1.json
